@@ -332,7 +332,7 @@ function isMember(chats) {
 
     chats.forEach(chat_id => {
         if (!userData.chats[chat_id]) {
-            nonCheckedChats.push(chat_id);
+            nonCheckedList.push(chat_id);
         } else if (userData.chats[chat_id].joined) {
             joinedList.push(chat_id);
         } else {
@@ -341,10 +341,10 @@ function isMember(chats) {
     });
 
     return {
-        status: needJoiningList.length === 0 && nonCheckedChats.length === 0,
+        status: needJoiningList.length === 0 && nonCheckedList.length === 0,
         joinedList: joinedList,
         needJoiningList: needJoiningList,
-        nonCheckedChats: nonCheckedList,
+        nonCheckedList: nonCheckedList,
     }
 }
 
