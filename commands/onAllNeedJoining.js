@@ -9,4 +9,5 @@
   aliases: 
 CMD*/
 
-Bot.sendMessage("You haven't joined all the chats yet!" + "\n Not joined List :- " + "\n" + options.needJoiningList.join("\n") );
+Bot.inspect(options)
+Bot.sendMessage("You haven't joined all the chats yet!" + "\n Not joined List :- " + "\n" + options.MCL.needJoiningList.join("\n") );
