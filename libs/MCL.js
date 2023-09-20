@@ -135,8 +135,8 @@ function check(opts) {
 
     let currentDate = Date.now();
     userData.scheduledAt = currentDate;
-    opts.scheduledAt = currentDate;    
-    
+    opts.scheduledAt = currentDate;
+
     saveUserData(userData);
 
     debugInfo("create task for checking");
@@ -267,42 +267,45 @@ function handleAllJoiningOrNeedJoining(userData) {
         }
     });
 
-    if (joinedList.length === chats.length) {
-        if (options.bb_options.callback.onAllJoining) {
-            Bot.run({
-                command: options.bb_options.callback.onAllJoining,
-                options: {
-                    'MCL': {
-                        chats: chats,
-                        user_id: user.telegramid,
-                        status: true,
-                        joinedList: joinedList,
-                        needJoiningList: needJoiningList
-                    },
-                    bb_options: options.bb_options.bb_options
-                },
-                run_after: 1
-            })
-        }
+    if (joinedList.length + needJoiningList.length == chats.length) {
 
-        userData.lastSuccessCheckTime = options.bb_options.scheduledAt;
-        saveUserData(userData);
-    } else {
-        if (options.bb_options.callback.onAllNeedJoining) {
-            Bot.run({
-                command: options.bb_options.callback.onAllNeedJoining,
-                options: {
-                    'MCL': {
-                        chats: chats,
-                        user_id: user.telegramid,
-                        status: false,
-                        joinedList: joinedList,
-                        needJoiningList: needJoiningList
+        if (joinedList.length === chats.length) {
+            if (options.bb_options.callback.onAllJoining) {
+                Bot.run({
+                    command: options.bb_options.callback.onAllJoining,
+                    options: {
+                        'MCL': {
+                            chats: chats,
+                            user_id: user.telegramid,
+                            status: true,
+                            joinedList: joinedList,
+                            needJoiningList: needJoiningList
+                        },
+                        bb_options: options.bb_options.bb_options
                     },
-                    bb_options: options.bb_options.bb_options
-                },
-                run_after: 1
-            })
+                    run_after: 1
+                })
+            }
+
+            userData.lastSuccessCheckTime = options.bb_options.scheduledAt;
+            saveUserData(userData);
+        } else {
+            if (options.bb_options.callback.onAllNeedJoining) {
+                Bot.run({
+                    command: options.bb_options.callback.onAllNeedJoining,
+                    options: {
+                        'MCL': {
+                            chats: chats,
+                            user_id: user.telegramid,
+                            status: false,
+                            joinedList: joinedList,
+                            needJoiningList: needJoiningList
+                        },
+                        bb_options: options.bb_options.bb_options
+                    },
+                    run_after: 1
+                })
+            }
         }
     }
 }
