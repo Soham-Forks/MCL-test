@@ -1,6 +1,6 @@
 {
   "bb_sync_version":"1.0",
-  "name":"testBot",
-  "git_remote":"git@github.com:Soham-Forks/MCL-test.git",
-  "csv_url":""
+  "name":"Cloned bot: MCLTestDemoBot",
+  "csv_url":null,
+  "git_remote":"git@github.com:Soham-Forks/MCL-test.git"
 }
