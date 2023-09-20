@@ -267,7 +267,7 @@ function handleAllJoiningOrNeedJoining(userData) {
         }
     });
 
-    if (needJoiningList.length !== 0) {
+    if (joinedList.length === chats.length) {
         if (options.bb_options.callback.onAllJoining) {
             Bot.run({
                 command: options.bb_options.callback.onAllJoining,
