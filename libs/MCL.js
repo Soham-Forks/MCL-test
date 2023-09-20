@@ -73,7 +73,7 @@ function handle(opts) {
     if (!user) { return }  // can check only for user
 
     if (!opts.callback || Object.keys(opts.callback).length === 0) {
-        otps.callback = {}
+        opts.callback = {}
     }
     opts.callback = { ...opts.callback, ...{ onJoining: null, onNeedJoining: null, onAllJoining: null, onAllNeedJoining: null, onError: null } }
 
@@ -144,7 +144,7 @@ function check(opts) {
     // create task for checking
     Bot.run({
         command: LIB_PREFIX + "checkMemberships",
-        options: otps,
+        options: opts,
         run_after: 1  // just for run in background
     })
 }
@@ -321,7 +321,7 @@ function isMember(chats) {
     let userData = getUserData();
     let joinedList = [];
     let needJoiningList = [];
-    let nonCheckedChats = [];
+    let nonCheckedList = [];
 
 
     chats.forEach(chat_id => {
@@ -338,7 +338,7 @@ function isMember(chats) {
         status: needJoiningList.length === 0 && nonCheckedChats.length === 0,
         joinedList: joinedList,
         needJoiningList: needJoiningList,
-        nonCheckedChats: nonCheckedChats,
+        nonCheckedChats: nonCheckedList,
     }
 }
 
