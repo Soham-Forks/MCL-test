@@ -13,9 +13,8 @@ function saveUserData(userData) {
 }
 
 function debugInfo(info) {
-    if (!(Bot.getProperty(`${LIB_PREFIX}_dubug`, false))) { return }
+    if (!Bot.getProperty(`${LIB_PREFIX}_dubug`, false)) { return }
     Api.sendMessage({
-        cgat_id: 848823540,
         text: "<b>MCLDebug</b>" +
             "\n <i>turn off debug in AdminPanel</i> " +
             "\n  <b>message:</b> " + message +
@@ -166,7 +165,7 @@ function checkMemberships() {
 }
 
 function checkMembership() {
-    chat_id = params.split(" ")[0];
+    let chat_id = params.split(" ")[0];
     if (!chat_id) { return }
 
     Api.getChatMember({
