@@ -101,7 +101,7 @@ function handle(opts) {
     if (!canRunHandleAgain(lastSuccessCheckTime, opts.delay)) {
         // check is not needed now
         debugInfo("Checking is not required since the delay time has not come yet.\nCurrent delay: " +
-            String(opts.every) + " min")
+            String(opts.delay) + " min")
         return
     }
 
@@ -253,6 +253,9 @@ function handleAllJoiningOrNeedJoining(userData) {
     let lastCheckTime = options.bb_options.scheduledAt;
 
     chats.forEach(chat_id => {
+        if (!userData.chats[chat_id]) {
+            return;
+        }
         if (userData.chats[chat_id].lastCheckTime !== lastCheckTime) {
             return;
         }
