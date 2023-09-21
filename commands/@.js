@@ -15,46 +15,18 @@ let handle = Libs.MCL.handle({
         onAllNeedJoining: "onAllNeedJoining",
     },
     delay: "15", //in minutes
-    except: ["/start","Check","/del"],
+    except: ["/start","Check","/del","/test"],
     bb_options: {
         data: "to",
         pass: "any"
     }
 });
 
-let isMember = Libs.MCL.isMember(["@MCLTestChannel1", "@MCLTestChannel2", "@MCLTestGroup"])
-
-switch (handle.status) {
-    case "internal":
-        break;
-    case "callback":
-        break;
-    case "exception":
-        break;
-    case "subCommand":
-        break;
-    case "delayToCome":
-        if(!isMember.status){
-            Bot.sendMessage("Access Denied")
-            return
-        }
-        break;
-    case "checking":
-        if(!isMember.status){
-            Bot.sendMessage("Access Denied")
-            return
-        }
-        break;
-    case "checkScheduled":
-        if(!isMember.status){
-            Bot.sendMessage("Access Denied")
-            return
-        }
-        break;
-    case "tooFast":
-        if(!isMember.status){
-            Bot.sendMessage("Access Denied")
-            return
-        }
-        break;
+Bot.inspect({...handle, ...{message:message}})
+if (handle.status === "delayToCome" || handle.status === "checking" || handle.status === "checkScheduled" || handle.status === "tooFast") {
+    let isMember = Libs.MCL.isMember(["@MCLTestChannel1", "@MCLTestChannel2", "@MCLTestGroup"])
+    if (!isMember.status) {
+        Bot.sendMessage("Access Denied");
+        return;  // This return statement stops the code execution
+    }
 }

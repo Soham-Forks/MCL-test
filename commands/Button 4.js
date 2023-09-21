@@ -4,8 +4,12 @@
   need_reply: 
   auto_retry_time: 
   folder: 
-  answer: Button 4
+
+  <<ANSWER
+
+  ANSWER
   keyboard: 
   aliases: 
 CMD*/
 
+Bot.sendMessage("Button 4")
