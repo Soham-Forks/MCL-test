@@ -158,7 +158,7 @@ function check(opts) {
     Bot.run({
         command: LIB_PREFIX + "checkMemberships",
         options: opts,
-        run_after: 0.01  // just for run in background
+        run_after: 1  // just for run in background
     })
     return "check is scheduled"
 }
@@ -173,7 +173,7 @@ function checkMemberships() {
         Bot.run({
             command: LIB_PREFIX + "checkMembership " + chat_id,
             options: options,          // passed options
-            run_after: 0.01,              // just for run in background
+            run_after: 1,              // just for run in background
         })
     }
 }
