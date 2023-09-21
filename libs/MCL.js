@@ -75,7 +75,7 @@ function handle(opts) {
     if (!opts.callback || Object.keys(opts.callback).length === 0) {
         opts.callback = {}
     }
-    opts.callback = { ...opts.callback, ...{ onJoining: null, onNeedJoining: null, onAllJoining: null, onAllNeedJoining: null, onError: null } }
+    opts.callback = {...{ onJoining: null, onNeedJoining: null, onAllJoining: null, onAllNeedJoining: null, onError: null }, ...opts.callback}
 
     if (!opts.except || opts.except.length === 0) {
         opts.except = []
