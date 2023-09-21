@@ -9,7 +9,7 @@
   aliases: 
 CMD*/
 
-Libs.MCL.handle({
+/*Libs.MCL.handle({
     chats: ["@MCLTestChannel1", "@MCLTestChannel2", "@MCLTestGroup"],
     callback: {
         onJoining: false,
@@ -24,4 +24,4 @@ Libs.MCL.handle({
         data: "to",
         pass: "any"
     }
-});
+});*/
