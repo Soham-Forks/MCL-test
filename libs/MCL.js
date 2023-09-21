@@ -8,20 +8,9 @@ function getUserData() {
 }
 
 function saveUserData(userData) {
-    debugInfo("saveUserData: " + JSON.stringify(userData));
     User.setProperty(LIB_PREFIX + "Data", userData, "json");
 }
 
-function debugInfo(info) {
-    if (!Bot.getProperty(`${LIB_PREFIX}_dubug`, false)) { return }
-    Api.sendMessage({
-        text: "<b>MCLDebug</b>" +
-            "\n <i>turn off debug in AdminPanel</i> " +
-            "\n  <b>message:</b> " + message +
-            "\n\n⚡ " + info,
-        parse_mode: "HTML"
-    })
-}
 
 function isInternalCommand() {
     if (!message) { return false }
@@ -181,7 +170,6 @@ function check(opts) {
 
 function checkMemberships() {
     let chats = options.chats;
-    debugInfo("run checking for " + JSON.stringify(chats));
 
     for (let ind in chats) {
         // several chats
@@ -212,7 +200,6 @@ function onCheckMembership() {
     let userData = getUserData();
 
     if (isJoined(options)) {
-        debugInfo("user is joined to " + chat_id + " chat")
         handleMembership(chat_id, userData)
     } else {
         handleNoneMembership(chat_id, userData)
@@ -340,7 +327,6 @@ function handleAllJoiningOrNeedJoining() {
 }
 
 function onError() {
-    debugInfo("onError for " + params + " >" + JSON.stringify(options))
     if (options.bb_options.callback.onError) {
         Bot.run({
             command: options.bb_options.callback.onError,
