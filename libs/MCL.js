@@ -41,12 +41,12 @@ function isCallbackCommand(callbacks) {
     )
 }
 
-function isExpectionCommand(expections) {
+function isExceptionCommand(exceptions) {
     if (!message) { return false }
 
     return (
-        expections.some(expection => {
-            return typeof expection === "string" && message.startsWith(expection);
+        exceptions.some(exception => {
+            return typeof exception === "string" && message.startsWith(exception);
         })
     )
 }
@@ -84,37 +84,47 @@ function handle(opts) {
     if (!opts.delay) {
         opts.delay = 120
     }
+
     // ignore internal/callback/exception commands
-    if (isInternalCommand() || isCallbackCommand(opts.callback) || isExpectionCommand(opts.except)) {
-        debugInfo("ignore internal/callback/exception commands in handle()")
-        return
+    if (isInternalCommand()) {
+        return "internal"
+    }
+
+    if (isCallbackCommand(opts.callback)) {
+        return "callback"
+    }
+
+    if (isExceptionCommand(opts.except)) {
+        return "exception"
     }
 
     if (completed_commands_count > 0) {
-        debugInfo("handle can not be run on sub commands")
-        return
+        return "subcommand"
     }
 
-    debugInfo("handle()")
 
-    let lastSuccessCheckTime = getUserData().lastSuccessCheckTime;
-    if (!canRunHandleAgain(lastSuccessCheckTime, opts.delay)) {
-        // check is not needed now
-        debugInfo("Checking is not required since the delay time has not come yet.\nCurrent delay: " +
-            String(opts.delay) + " min")
-        return
+    let lastScheduledAt= getUserData().scheduledAt;
+    if (!canRunHandleAgain(lastScheduledAt, opts.delay)) {
+        return "too often"
     }
 
-    check(opts);
+    return check(opts);
 }
 
-function canRunHandleAgain(lastSuccessCheckTime, delay) {
-    if (!lastSuccessCheckTime) { return true }
+function canRunHandleAgain(lastScheduledAt, delay) {
+    if (!lastScheduledAt) { return false }
 
-    let duration = Date.now() - lastSuccessCheckTime; // in ms
+    let duration = Date.now() - lastScheduledAt; // in ms
     duration = duration / 1000 / 60; // in minutes
 
     return duration > parseInt(delay);
+}
+
+function isLastCheckFinished(userData) {
+    let scheduledAt = userData.scheduledAt;
+    let lastFinishedCheckTime = userData.lastFinishedCheckTime;
+
+    return scheduledAt === lastFinishedCheckTime;
 }
 
 function check(opts) {
@@ -125,12 +135,17 @@ function check(opts) {
 
     let userData = getUserData();
 
-    debugInfo("check() for user Data: " + JSON.stringify(userData));
+    // avoid multiple checking
+    if (!isLastCheckFinished(userData)) {
+        return "last check is not finished"
+    }
 
     // only 1 check per 2 second for one user
     if (userData.scheduledAt) {
         let duration = Date.now() - userData.scheduledAt;
-        if (duration < 2000) { return }
+        if (duration < 2000) {
+             return "check is too often"
+        }
     }
 
     let currentDate = Date.now();
@@ -139,14 +154,13 @@ function check(opts) {
 
     saveUserData(userData);
 
-    debugInfo("create task for checking");
-
     // create task for checking
     Bot.run({
         command: LIB_PREFIX + "checkMemberships",
         options: opts,
-        run_after: 1  // just for run in background
+        run_after: 0.01  // just for run in background
     })
+    return "check is scheduled"
 }
 
 function checkMemberships() {
@@ -159,7 +173,7 @@ function checkMemberships() {
         Bot.run({
             command: LIB_PREFIX + "checkMembership " + chat_id,
             options: options,          // passed options
-            run_after: 1,              // just for run in background
+            run_after: 0.01,              // just for run in background
         })
     }
 }
@@ -180,8 +194,6 @@ function checkMembership() {
 function onCheckMembership() {
     let chat_id = params.split(" ")[0];
     let userData = getUserData();
-
-    debugInfo("check response: " + JSON.stringify(options) + "\n\n> " + JSON.stringify(userData));
 
     if (isJoined(options)) {
         debugInfo("user is joined to " + chat_id + " chat")
@@ -246,7 +258,8 @@ function handleNoneMembership(chat_id, userData) {
     }
 }
 
-function handleAllJoiningOrNeedJoining(userData) {
+function handleAllJoiningOrNeedJoining() {
+    let userData = getUserData();
     let chats = options.bb_options.chats;
     let joinedList = [];
     let needJoiningList = [];
@@ -286,9 +299,6 @@ function handleAllJoiningOrNeedJoining(userData) {
                     run_after: 1
                 })
             }
-
-            userData.lastSuccessCheckTime = options.bb_options.scheduledAt;
-            saveUserData(userData);
         } else {
             if (options.bb_options.callback.onAllNeedJoining) {
                 Bot.run({
@@ -307,6 +317,9 @@ function handleAllJoiningOrNeedJoining(userData) {
                 })
             }
         }
+
+        userData.lastFinishedCheckTime = lastCheckTime;
+        saveUserData(userData);
     }
 }
 
