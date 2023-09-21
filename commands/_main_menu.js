@@ -13,9 +13,9 @@ let isMemeber = Libs.MCL.isMember(["@MCLTestChannel1", "@MCLTestChannel2", "@MCL
 
 if (!isMemeber) {
     Bot.sendMessage("You are not a member of the channel or group");
-    if(isMemeber.nonCheckedChats.length > 0){
+    if(isMemeber.nonCheckedList.length > 0){
         Libs.MCL.check({
-            chats: isMemeber.nonCheckedChats        
+            chats: isMemeber.nonCheckedList       
         })
     }
     return;

@@ -11,7 +11,6 @@ CMD*/
 
 Libs.MCL.check({
     chats: ["@MCLTestChannel1", "@MCLTestChannel2", "@MCLTestGroup"],
-    except: ["/start","Check"],
     callback: {
         onAllJoining : "onAllJoining",
         onAllNeedJoining : "onAllNeedJoining",
