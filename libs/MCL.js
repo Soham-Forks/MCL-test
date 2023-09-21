@@ -174,7 +174,9 @@ function check(opts) {
         options: opts,
         run_after: 1  // just for run in background
     })
-    return "checkScheduled"
+    return {
+        status: "checkScheduled"
+    }
 }
 
 function checkMemberships() {
