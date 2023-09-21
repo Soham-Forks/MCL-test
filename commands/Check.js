@@ -9,10 +9,11 @@
   aliases: 
 CMD*/
 
-Libs.MCL.check({
+Bot.inspect(Libs.MCL.check({
     chats: ["@MCLTestChannel1", "@MCLTestChannel2", "@MCLTestGroup"],
     callback: {
         onAllJoining : "onAllJoining",
         onAllNeedJoining : "onAllNeedJoining",
     }
-});
+})
+)
