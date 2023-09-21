@@ -17,7 +17,6 @@ let check = Libs.MCL.check({
     }
 })
 
-Bot.inspect(check)
 if(request.data){
   switch (check.status){
     case "checkScheduled":
@@ -29,16 +28,14 @@ if(request.data){
     case "checking":
       Api.answerCallbackQuery({
         callback_query_id: request.id,
-        text: "Checking..."
+        text: "Checking...",
       })
       break;
     case "tooFast":
       Api.answerCallbackQuery({
         callback_query_id: request.id,
         text: "Too fast",
-        show_alert: true
       })
       break;
   }
-
 }
