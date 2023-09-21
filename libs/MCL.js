@@ -156,7 +156,9 @@ function check(opts) {
     if (userData.scheduledAt) {
         let duration = Date.now() - userData.scheduledAt;
         if (duration < 2000) {
-             return "too fast"
+            return {
+                status: "tooFast",
+            }
         }
     }
 
