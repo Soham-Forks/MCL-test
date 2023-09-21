@@ -87,25 +87,35 @@ function handle(opts) {
 
     // ignore internal/callback/exception commands
     if (isInternalCommand()) {
-        return "internal"
+        return {
+            status: "internal"
+        }
     }
 
     if (isCallbackCommand(opts.callback)) {
-        return "callback"
+        return {
+            status: "callback",
+        }
     }
 
     if (isExceptionCommand(opts.except)) {
-        return "exception"
+        return {
+            status: "exception",
+        }
     }
 
     if (completed_commands_count > 0) {
-        return "subcommand"
+        return {
+            status: "subCommand",
+        }
     }
 
-
-    let lastScheduledAt= getUserData().scheduledAt;
+    let userData = getUserData();
+    let lastScheduledAt= userData.scheduledAt;
     if (!canRunHandleAgain(lastScheduledAt, opts.delay)) {
-        return "too often"
+        return {
+            status: "delayToCome",
+        }
     }
 
     return check(opts);
@@ -137,14 +147,16 @@ function check(opts) {
 
     // avoid multiple checking
     if (!isLastCheckFinished(userData)) {
-        return "last check is not finished"
+        return {
+            status: "checking"
+        }
     }
 
     // only 1 check per 2 second for one user
     if (userData.scheduledAt) {
         let duration = Date.now() - userData.scheduledAt;
         if (duration < 2000) {
-             return "check is too often"
+             return "too fast"
         }
     }
 
@@ -158,9 +170,9 @@ function check(opts) {
     Bot.run({
         command: LIB_PREFIX + "checkMemberships",
         options: opts,
-        run_after: 1  // just for run in background
+        run_after: 0.01  // just for run in background
     })
-    return "check is scheduled"
+    return "checkScheduled"
 }
 
 function checkMemberships() {
@@ -173,7 +185,7 @@ function checkMemberships() {
         Bot.run({
             command: LIB_PREFIX + "checkMembership " + chat_id,
             options: options,          // passed options
-            run_after: 1,              // just for run in background
+            run_after: 0.01,              // just for run in background
         })
     }
 }
