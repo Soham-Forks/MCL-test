@@ -1,5 +1,5 @@
-# Cloned bot: MCLTestDemoBot - chat bot
-It is repository for chat bot: [@Cloned bot: MCLTestDemoBot](https://t.me/Cloned bot: MCLTestDemoBot)
+# MCLDemoBot - chat bot
+It is repository for chat bot: [@MCLDemoBot](https://t.me/MCLDemoBot)
 
 ## What it is?
 This repository can be imported to [Bots.Business](https://bots.business) as a worked chat bot.
