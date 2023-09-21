@@ -76,7 +76,7 @@ function handle(opts) {
         opts.callback = {}
     }
     opts.callback = {...{ onJoining: null, onNeedJoining: null, onAllJoining: null, onAllNeedJoining: null, onError: null }, ...opts.callback}
-
+    Bpt.inspect(otps.callback)
     if (!opts.except || opts.except.length === 0) {
         opts.except = []
     }
