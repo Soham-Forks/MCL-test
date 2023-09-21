@@ -15,7 +15,7 @@ let handle = Libs.MCL.handle({
         onAllNeedJoining: "onAllNeedJoining",
     },
     delay: "15", //in minutes
-    except: ["/start","Check"],
+    except: ["/start","Check","/del"],
     bb_options: {
         data: "to",
         pass: "any"
@@ -24,11 +24,6 @@ let handle = Libs.MCL.handle({
 
 let isMember = Libs.MCL.isMember(["@MCLTestChannel1", "@MCLTestChannel2", "@MCLTestGroup"])
 
-function runOnAllNeedJoining(){
-    Bot.run({
-        command: "onAllNeedJoining",
-    })
-}
 switch (handle.status) {
     case "internal":
         break;
@@ -39,26 +34,26 @@ switch (handle.status) {
     case "subCommand":
         break;
     case "delayToCome":
-        if(!sMember.status){
-            runOnAllNeedJoining()
+        if(!isMember.status){
+            Bot.sendMessage("Access Denied")
             return
         }
         break;
     case "checking":
-        if(!sMember.status){
-            runOnAllNeedJoining()
+        if(!isMember.status){
+            Bot.sendMessage("Access Denied")
             return
         }
         break;
     case "checkScheduled":
-        if(!sMember.status){
-            runOnAllNeedJoining()
+        if(!isMember.status){
+            Bot.sendMessage("Access Denied")
             return
         }
         break;
     case "tooFast":
-        if(!sMember.status){
-            runOnAllNeedJoining()
+        if(!isMember.status){
+            Bot.sendMessage("Access Denied")
             return
         }
         break;

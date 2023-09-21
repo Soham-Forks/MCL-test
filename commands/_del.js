@@ -26,4 +26,3 @@ User.setProperty({
   value: null,
   user_id: 14911426
 })
-
